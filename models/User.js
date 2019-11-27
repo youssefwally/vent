@@ -12,8 +12,7 @@ const UserSchema = new Schema({
     required: true
   },
   problemType: {
-    type: String,
-    required: true
+    type: String
   }
 
 })

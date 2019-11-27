@@ -5,7 +5,7 @@ const router = express.Router();
 var config = require("../../config/jwt");
 const User = require("../../models/User");
 
-router.post('/register', async (req, res) => {
+  router.post('/register', async (req, res) => {
     const {
       email,
       password,
@@ -55,6 +55,80 @@ router.post('/register', async (req, res) => {
     });
   });
 
+  router.get("/logout", function(req, res) {
+    res.status(200).send({ auth: false, token: null });
+  });
+
+  router.get('/sProblem', async (req, res) => {
+    try {
+      var stat = 0
+      var token = req.headers['x-access-token'];
+     
+      if (!token) {
+        return res
+          .status(401)
+          .send({ auth: false, message: 'Please login first.'});
+      }
+      jwt.verify(token, config.secret, async function(err, decoded) {
+        if (err) {
+          return res
+            .status(500)
+            .send({ auth: false, message: 'Failed to authenticate token.'});
+        }
   
+        stat=decoded.id;
+      })
+  
+      let id = stat;
+    
+      const user = await User.findById(id);
+      const userProblem = await user.problemType;
+  
+      var query = { 
+        problemType: userProblem
+      }
+  
+      const common = await User.find(query);
+      const view = common.email
+      res.json({data:view})
+  
+    } catch(error) {
+      console.log(error);
+    }
+  
+  })
+  
+
+  router.put("/changeProblem", async (req, res) => {
+    try {
+      var stat = 0;
+      var token = req.headers["x-access-token"];
+      if (!token) {
+        return res
+          .status(401)
+          .send({ auth: false, message: "Please login first." });
+      }
+      jwt.verify(token, config.secret, async function(err, decoded) {
+        if (err) {
+          return res
+            .status(500)
+            .send({ auth: false, message: "Failed to authenticate token." });
+        }
+        stat = decoded.id;
+      });
+      const {
+        problemType
+      } = req.body
+      let id = stat;
+    
+      var query = { id: id};
+        await User.findOneAndUpdate(query, { problemType: problemType });
+        res.json({ msg: "Task assigned Successfully" });
+      
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
 
 module.exports = router;
