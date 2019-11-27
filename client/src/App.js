@@ -55,12 +55,16 @@ render(){
 
     <Router>
             <React.Fragment>
-              <Route
+            <Route
                 exact
                 path="/login"
                 render={() => (
                   <>
-                    <LoginPage/>
+                    {sessionStorage.getItem("token") !== null ? (
+                      (document.location.href = "/")
+                    ) : (
+                      <LoginPage />
+                    )}
                   </>
                 )}
               />

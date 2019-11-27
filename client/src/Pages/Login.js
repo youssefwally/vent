@@ -132,7 +132,7 @@ class SimpleContainer extends React.Component {
     if (email !== "" && password !== "") {
       const info = this.state.data;
       axios
-        .post(`localhost:3000/api/user/login`, info)
+        .post('localhost:3000/api/user/login', info)          
         .then(res => {
           if (res.status !== 200) {
             this.catchError(res);
@@ -145,6 +145,24 @@ class SimpleContainer extends React.Component {
             }
           }
         })
+//     axios({
+//         method: 'post',
+//         url: 'localhost:3000/api/user/login',
+//         headers:{"access-control-allow-origin":"*"},
+//         data:info
+//       })
+//       .then(res => {
+//               if (res.status !== 200) {
+//                 this.catchError(res);
+//               } else {
+//                 if (res.data.auth) {
+//                   sessionStorage.setItem("token", res.data.token);
+//                   sessionStorage.setItem("auth", res.data.auth);
+//                   sessionStorage.setItem("id", res.data.id);
+//                   document.location.href = "/";
+//                 }
+//               }
+//       })
         .catch(this.catchError);
     }
   };
