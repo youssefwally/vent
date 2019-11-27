@@ -9,6 +9,10 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
 import LoginPage from './Pages/Login'
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,15 +30,26 @@ export class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-       classes : useStyles
+       classes : useStyles,
+       open:false,
+       menu:""
+      
+      
     };
-    
+  
   }
 
 
 home =()=>{
   document.location.href="/"
 }
+
+ 
+
+ handleMenu = e => {
+   this.state.open==true ? this.setState({open:false}) :
+ this.setState({open:true})
+};
 
   logout = () => {
     
@@ -44,12 +59,45 @@ home =()=>{
      
   }
 
+  closeMenu=()=>{
+this.setState({menu:null})
+  }
 login=()=>{
   document.location.href = "/login";
 }   
 
 render(){
  // const classes = useStyles();
+
+{/* <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={this.handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+        id="menu-appbar"
+        
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={this.state.open}
+        onBlur={() => this.setState({open: false})}
+      >
+        <MenuItem >Profile</MenuItem>
+        <MenuItem>My account</MenuItem>
+        <MenuItem onClick={this.logout}>Logout</MenuItem>
+      </Menu> */}
+ 
   return (
   
     <div>
@@ -61,8 +109,41 @@ render(){
     <Typography variant="h6" className={this.state.classes.title}>
       Vent
     </Typography>
-    <Button color="inherit" style={{"margin-left":"90%"}} onClick={sessionStorage.getItem('token')=="" ? this.login:this.logout}>{sessionStorage.getItem('token')=="" ?"Login":"Logout"}</Button>
+    {sessionStorage.getItem("token")=="" ?<Button color="inherit" style={{"margin-left":"90%"}} onClick={this.login}>Login</Button> :
+  <Button color="inherit" style={{"margin-left":"90%"}}>
+    <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={this.handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+        id="menu-appbar"
+        
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={this.state.open}
+        onBlur={() => this.setState({open: false})}
+      >
+        <MenuItem >Profile</MenuItem>
+        <MenuItem>My account</MenuItem>
+        <MenuItem onClick={this.logout}>Logout</MenuItem>
+      </Menu>
+      </Button>
+}
+    
   </Toolbar>
+  
 </AppBar>
     
 
