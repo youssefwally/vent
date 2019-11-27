@@ -30,10 +30,11 @@ class SimpleContainer extends React.Component {
       data: {
         email: "",
         password: ""
+    
       },
       isEmptyEmail: false,
       isEmptyPass: false,
-      auth: true,
+      auth: true
     };
   }
 
@@ -102,7 +103,7 @@ class SimpleContainer extends React.Component {
     });
   };
 
-  handleLogin = () => {
+  handleLogin = (e) => {
     const email = this.state.data.email;
     const password = this.state.data.password;
     if (email === "") {
@@ -131,38 +132,31 @@ class SimpleContainer extends React.Component {
     }
     if (email !== "" && password !== "") {
       const info = this.state.data;
-      axios
-        .post('localhost:3000/api/user/login', info)          
-        .then(res => {
-          if (res.status !== 200) {
-            this.catchError(res);
-          } else {
-            if (res.data.auth) {
-              sessionStorage.setItem("token", res.data.token);
-              sessionStorage.setItem("auth", res.data.auth);
-              sessionStorage.setItem("id", res.data.id);
-              document.location.href = "/";
-            }
-          }
-        })
-//     axios({
-//         method: 'post',
-//         url: 'localhost:3000/api/user/login',
-//         headers:{"access-control-allow-origin":"*"},
-//         data:info
-//       })
-//       .then(res => {
-//               if (res.status !== 200) {
-//                 this.catchError(res);
-//               } else {
-//                 if (res.data.auth) {
-//                   sessionStorage.setItem("token", res.data.token);
-//                   sessionStorage.setItem("auth", res.data.auth);
-//                   sessionStorage.setItem("id", res.data.id);
-//                   document.location.href = "/";
-//                 }
-//               }
-//       })
+
+      fetch('http://localhost:3000/api/user/login', {
+        method: 'POST',
+        body: JSON.stringify(info),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => {
+        res.json().then((data) => {
+
+            if (res.status !== 200) {
+                        this.catchError(res);
+                      } else {
+                        if (data.auth==true) {
+                            console.log("555555555");
+                          sessionStorage.setItem("token", data.token);
+                          sessionStorage.setItem("auth", data.auth);
+                          sessionStorage.setItem("id", data.id);
+                          document.location.href = "/";
+                          
+                        }
+                      }
+                    })
+      })
+   
         .catch(this.catchError);
     }
   };
