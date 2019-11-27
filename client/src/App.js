@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-
+import LoginPage from './Pages/Login'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,7 +31,9 @@ export class App extends React.Component {
     
   }
 
-   
+login=()=>{
+  document.location.href = "/login";
+}   
 
 render(){
  // const classes = useStyles();
@@ -46,7 +48,7 @@ render(){
     <Typography variant="h6" className={this.state.classes.title}>
       Vent
     </Typography>
-    <Button color="inherit" style={{"margin-left":"90%"}} >Login</Button>
+    <Button color="inherit" style={{"margin-left":"90%"}} onClick={this.login} >Login</Button>
   </Toolbar>
 </AppBar>
     
@@ -58,7 +60,7 @@ render(){
                 path="/login"
                 render={() => (
                   <>
-                    <p>Login PAge</p>
+                    <LoginPage/>
                   </>
                 )}
               />
