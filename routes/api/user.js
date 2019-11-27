@@ -88,7 +88,7 @@ const User = require("../../models/User");
       let id = stat;
     
       const user = await User.findById(id);
-      if (user) {
+      if (!user) {
         return res.status(404).send({ error: "user does not exist" });
       }
       const userProblem = await user.problemType;
@@ -130,7 +130,7 @@ const User = require("../../models/User");
       let id = stat;
       const problemType = req.body.problemType;
       const user = await User.findById(id);
-      if (user) {
+      if (!user) {
         return res.status(404).send({ error: "user does not exist" });
       }
       var query = { _id: id};
@@ -169,7 +169,7 @@ const User = require("../../models/User");
         sysPaired = '1';
     }
     const user = await User.findById(id);
-      if (user) {
+      if (!user) {
         return res.status(404).send({ error: "user does not exist" });
       }
       var query = { _id: id};
@@ -214,5 +214,68 @@ const User = require("../../models/User");
     }
   });
 
+  router.put("/changePassword", async (req, res) => {
+    try {
+      var stat = 0;
+      var token = req.headers["x-access-token"];
+      if (!token) {
+        return res
+          .status(401)
+          .send({ auth: false, message: "Please login first." });
+      }
+      jwt.verify(token, config.secret, async function(err, decoded) {
+        if (err) {
+          return res
+            .status(500)
+            .send({ auth: false, message: "Failed to authenticate token." });
+        }
+        stat = decoded.id;
+      });
+      let id = stat;
+      const password = req.body.password;
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).send({ error: "user does not exist" });
+      }
+      var query = { _id: id};
+        await User.findOneAndUpdate(query, { password: password });
+        res.json({ msg: "Password Changed Successfully" });
+      
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  router.put("/changeEmail", async (req, res) => {
+    try {
+      var stat = 0;
+      var token = req.headers["x-access-token"];
+      if (!token) {
+        return res
+          .status(401)
+          .send({ auth: false, message: "Please login first." });
+      }
+      jwt.verify(token, config.secret, async function(err, decoded) {
+        if (err) {
+          return res
+            .status(500)
+            .send({ auth: false, message: "Failed to authenticate token." });
+        }
+        stat = decoded.id;
+      });
+      let id = stat;
+      const email = req.body.email;
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).send({ error: "user does not exist" });
+      }
+      var query = { _id: id};
+        await User.findOneAndUpdate(query, { email: email });
+        res.json({ msg: "Email Changed Successfully" });
+      
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
 module.exports = router;
