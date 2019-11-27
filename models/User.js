@@ -17,7 +17,7 @@ const UserSchema = new Schema({
   },
   paired: {
     type: String,
-    default: '0'
+    default: 'No'
   }
 
 })

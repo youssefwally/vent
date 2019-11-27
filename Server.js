@@ -24,6 +24,10 @@ mongoose
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.log(err))
 
+
+mongoose.set('useFindAndModify', false);
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useUnifiedTopology', true);
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 

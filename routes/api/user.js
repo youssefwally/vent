@@ -12,7 +12,7 @@ const User = require("../../models/User");
         password,
         problemType
       } = req.body
-      const users = await User.findOne({problemType: req.body.email} )
+      const users = await User.findOne({email: req.body.email} )
       if (users) return res.status(400).json({ error: 'Email already exists' })
       const salt = bcrypt.genSaltSync(10)
       const hashedPassword = bcrypt.hashSync(password, salt)
@@ -88,9 +88,13 @@ const User = require("../../models/User");
       let id = stat;
     
       const user = await User.findById(id);
+      if (user) {
+        return res.status(404).send({ error: "user does not exist" });
+      }
       const userProblem = await user.problemType;
   
       var query = { 
+        _id: {$ne: id},
         problemType: userProblem,
         paired: "0"
       }
@@ -123,13 +127,14 @@ const User = require("../../models/User");
         }
         stat = decoded.id;
       });
-      const {
-        problemType
-      } = req.body
       let id = stat;
-    
-      var query = { id: id};
-        await User.findOneAndUpdate(query, { problemType: req.body.problemType });
+      const problemType = req.body.problemType;
+      const user = await User.findById(id);
+      if (user) {
+        return res.status(404).send({ error: "user does not exist" });
+      }
+      var query = { _id: id};
+        await User.findOneAndUpdate(query, { problemType: problemType });
         res.json({ msg: "Problem Changed Successfully" });
       
     } catch (error) {
@@ -155,18 +160,19 @@ const User = require("../../models/User");
         }
         stat = decoded.id;
       });
-      const {
-        paired
-      } = req.body
       let id = stat;
-      const sysPaired = '0';
-    if(paired==='yes'){
+      var sysPaired = '0';
+    if(req.body.paired==='yes'){
         sysPaired = '1';
     }
-    if(paired==='Yes'){
+    if(req.body.paired==='Yes'){
         sysPaired = '1';
     }
-      var query = { id: id};
+    const user = await User.findById(id);
+      if (user) {
+        return res.status(404).send({ error: "user does not exist" });
+      }
+      var query = { _id: id};
         await User.findOneAndUpdate(query, { paired: sysPaired });
         res.json({ msg: "Availability Changed Successfully" });
       
