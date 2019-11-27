@@ -4,19 +4,6 @@ const router = express.Router()
 const Problem = require('../../models/Problem')
 
 router.get("/vProblems", async (req, res) => {
-    var token = req.headers["x-access-token"];
-    if (!token) {
-      return res
-        .status(401)
-        .send({ auth: false, message: "Please login first." });
-    }
-    jwt.verify(token, config.secret, async function(err, decoded) {
-      if (err) {
-        return res
-          .status(500)
-          .send({ auth: false, message: "Failed to authenticate token." });
-      }
-    });
     const problems = await Problem.find();
     res.json({ data: problems });
   });
@@ -40,4 +27,20 @@ router.get("/vProblems", async (req, res) => {
     res.json({ msg: 'Problem was created successfully', data: nProblem })
   })
   
+  router.delete("/dProblem", async (req, res) => {
+    const {
+      problemType
+    } = req.body
+      const problem = await Problem.findOne(problemType);
+      if (problem) {
+        const deletedProblem = await Problem.findOneAndRemove(problemType);
+        res.json({
+          msg: "Problem was deleted successfully",
+          data: deletedProblem
+        });
+      } else {
+        return res.json({ msg: 'Problem does not exists' })
+      }
+  });
+
 module.exports = router

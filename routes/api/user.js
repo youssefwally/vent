@@ -59,7 +59,7 @@ const User = require("../../models/User");
     res.status(200).send({ auth: false, token: null });
   });
 
-  router.get('/sProblem', async (req, res) => {
+  router.get('/sProblemView', async (req, res) => {
     try {
       var stat = 0
       var token = req.headers['x-access-token'];
@@ -85,7 +85,8 @@ const User = require("../../models/User");
       const userProblem = await user.problemType;
   
       var query = { 
-        problemType: userProblem
+        problemType: userProblem,
+        paired: "0"
       }
   
       const common = await User.find(query);
@@ -123,8 +124,79 @@ const User = require("../../models/User");
     
       var query = { id: id};
         await User.findOneAndUpdate(query, { problemType: problemType });
-        res.json({ msg: "Task assigned Successfully" });
+        res.json({ msg: "Problem Changed Successfully" });
       
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+
+  router.put("/changePair", async (req, res) => {
+    try {
+      var stat = 0;
+      var token = req.headers["x-access-token"];
+      if (!token) {
+        return res
+          .status(401)
+          .send({ auth: false, message: "Please login first." });
+      }
+      jwt.verify(token, config.secret, async function(err, decoded) {
+        if (err) {
+          return res
+            .status(500)
+            .send({ auth: false, message: "Failed to authenticate token." });
+        }
+        stat = decoded.id;
+      });
+      const {
+        paired
+      } = req.body
+      let id = stat;
+      const sysPaired = '0';
+    if(paired==='yes'){
+        sysPaired = '1';
+    }
+    if(paired==='Yes'){
+        sysPaired = '1';
+    }
+      var query = { id: id};
+        await User.findOneAndUpdate(query, { paired: sysPaired });
+        res.json({ msg: "Availability Changed Successfully" });
+      
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+
+  router.delete("/disable", async (req, res) => {
+    try {
+      var stat = 0;
+      var token = req.headers["x-access-token"];
+      if (!token) {
+        return res
+          .status(401)
+          .send({ auth: false, message: "Please login first." });
+      }
+      jwt.verify(token, config.secret, async function(err, decoded) {
+        if (err) {
+          return res
+            .status(500)
+            .send({ auth: false, message: "Failed to authenticate token." });
+        }
+        stat = decoded.id;
+      });
+      const user = await User.findById(stat);
+      if (user) {
+        const deletedUser = await User.findByIdAndRemove(stat);
+        res.json({
+          msg: "User was deleted successfully",
+          data: deletedUser
+        });
+      } else {
+        return res.json({ msg: 'User does not exists' })
+      }
     } catch (error) {
       console.log(error);
     }

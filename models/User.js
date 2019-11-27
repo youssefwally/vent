@@ -13,6 +13,10 @@ const UserSchema = new Schema({
   },
   problemType: {
     type: String
+  },
+  paired: {
+    type: String,
+    default: '0'
   }
 
 })
