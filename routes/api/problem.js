@@ -3,13 +3,14 @@ const express = require('express')
 const router = express.Router()
 const Problem = require('../../models/Problem')
 
-router.get("/vProblems", async (req, res) => {
+router.get("/vProblem", async (req, res) => {
     const problems = await Problem.find();
-    res.json({ data: problems });
+    const view = problems;
+    res.json({ data: view });
   });
 
 
-  router.post('/aProblems', async (req, res) => {
+  router.post('/aProblem', async (req, res) => {
     const {
       problemType
     } = req.body
@@ -28,19 +29,24 @@ router.get("/vProblems", async (req, res) => {
   })
   
   router.delete("/dProblem", async (req, res) => {
-    const {
-      problemType
-    } = req.body
-      const problem = await Problem.findOne(problemType);
-      if (problem) {
-        const deletedProblem = await Problem.findOneAndRemove(problemType);
-        res.json({
-          msg: "Problem was deleted successfully",
-          data: deletedProblem
-        });
-      } else {
-        return res.json({ msg: 'Problem does not exists' })
-      }
+    try{
+      const {
+        problemType
+      } = req.body
+        const problem = await Problem.findOne({problemType: req.body.problemType});
+        if (problem) {
+          const deletedProblem = await Problem.findOneAndRemove({problemType: req.body.problemType});
+          res.json({
+            msg: "Problem was deleted successfully",
+            data: deletedProblem
+          });
+        } else {
+          return res.json({ msg: 'Problem does not exists' })
+        }
+    }catch (error) {
+      // We will be handling the error later
+      console.log(error);
+    }
   });
 
 module.exports = router

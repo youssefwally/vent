@@ -12,7 +12,8 @@ const UserSchema = new Schema({
     required: true
   },
   problemType: {
-    type: String
+    type: String,
+    default: 'N/A'
   },
   paired: {
     type: String,

@@ -1,5 +1,8 @@
+const express = require('express')
+const app = express()
 const mongoose = require('mongoose')
-const reviewer = require('./routes/api/reviewer')
+const user = require('./routes/api/user')
+const problem = require('./routes/api/problem')
 const cors = require('cors')
 
 app.use(cors())
@@ -26,7 +29,7 @@ app.use(express.urlencoded({ extended: false }))
 
 // Direct routes to appropriate files
 app.use('/api/user', user)
-app.use('/api/problem', problems)
+app.use('/api/problem', problem)
 
 // Handling 404
 app.use((req, res) => {

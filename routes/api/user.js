@@ -6,36 +6,42 @@ var config = require("../../config/jwt");
 const User = require("../../models/User");
 
   router.post('/register', async (req, res) => {
-    const {
-      email,
-      password,
-      problemType
-    } = req.body
-    const users = await User.findOne({ email })
-    if (users) return res.status(400).json({ error: 'Email already exists' })
-    const salt = bcrypt.genSaltSync(10)
-    const hashedPassword = bcrypt.hashSync(password, salt)
-    var nUser = new User({
-      email,
-      password: hashedPassword,
-      problemType
-    })
-  
-    var newUser = await Reviewer.create(nUser)
-    token = jwt.sign({ id: newUser._id }, config.secret, {
-      expiresIn: 86400 // expires in 24 hours
-    })
-    res.status(200).send({
-      auth: true,
-      token: token,
-      msg: 'User was created successfully',
-      data: nUser
-    })
-    res.json({ msg: 'User was created successfully', data: nUser })
+    try{
+      const {
+        email,
+        password,
+        problemType
+      } = req.body
+      const users = await User.findOne({problemType: req.body.email} )
+      if (users) return res.status(400).json({ error: 'Email already exists' })
+      const salt = bcrypt.genSaltSync(10)
+      const hashedPassword = bcrypt.hashSync(password, salt)
+      var nUser = new User({
+        email,
+        password: hashedPassword,
+        problemType
+      })
+    
+      var newUser = await User.create(nUser)
+      token = jwt.sign({ id: newUser._id }, config.secret, {
+        expiresIn: 86400 // expires in 24 hours
+      })
+      res.status(200).send({
+        auth: true,
+        token: token,
+        msg: 'User was created successfully',
+        data: nUser
+      })
+      res.json({ msg: 'User was created successfully', data: nUser })
+    }
+    catch (error) {
+      // We will be handling the error later
+      console.log(error);
+    }
   })
 
   router.post("/login", function(req, res) {
-    Reviewer.findOne({ email: req.body.email }, function(err, user) {
+    User.findOne({ email: req.body.email }, function(err, user) {
       if (err) {
         return res.status(401).send({ auth: false, message: "Server error." });
       }
@@ -90,7 +96,7 @@ const User = require("../../models/User");
       }
   
       const common = await User.find(query);
-      const view = common.email
+      const view = common
       res.json({data:view})
   
     } catch(error) {
@@ -123,7 +129,7 @@ const User = require("../../models/User");
       let id = stat;
     
       var query = { id: id};
-        await User.findOneAndUpdate(query, { problemType: problemType });
+        await User.findOneAndUpdate(query, { problemType: req.body.problemType });
         res.json({ msg: "Problem Changed Successfully" });
       
     } catch (error) {
