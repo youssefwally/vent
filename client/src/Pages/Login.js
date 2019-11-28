@@ -5,10 +5,10 @@ import Username from "../Components/TextFields/Username";
 import Password from "../Components/TextFields/Password";
 import LoginButton from "../Components/Buttons/LoginButton";
 import { withStyles } from "@material-ui/core/styles";
-import axios from "../axiosInstance";
 import SnackBar from "../Components/Snackbars/LoginSnackbar";
 import Logo from "../Images/vent.jpg";
 import {withRouter} from 'react-router-dom'
+import Account from '../Pages/Account'
 
 const styles = {
   header: {
@@ -40,6 +40,7 @@ class SimpleContainer extends React.Component {
 
   render() {
     const { classes } = this.props;
+
     return (
       <div>
         <div className={classes.root}>
@@ -146,10 +147,11 @@ class SimpleContainer extends React.Component {
                         this.catchError(res);
                       } else {
                         if (data.auth==true) {
-                            console.log("555555555");
+                           
                           sessionStorage.setItem("token", data.token);
                           sessionStorage.setItem("auth", data.auth);
                           sessionStorage.setItem("id", data.id);
+                          sessionStorage.setItem("email",info.email);
                           document.location.href = "/";
                           
                         }

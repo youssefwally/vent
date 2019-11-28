@@ -12,7 +12,7 @@ import LoginPage from './Pages/Login'
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-
+import Account from "./Pages/Account"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -62,46 +62,24 @@ home =()=>{
   closeMenu=()=>{
 this.setState({menu:null})
   }
+
 login=()=>{
   document.location.href = "/login";
 }   
 
-render(){
- // const classes = useStyles();
+goToProfile=()=>{
 
-{/* <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={this.handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-        id="menu-appbar"
-        
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        open={this.state.open}
-        onBlur={() => this.setState({open: false})}
-      >
-        <MenuItem >Profile</MenuItem>
-        <MenuItem>My account</MenuItem>
-        <MenuItem onClick={this.logout}>Logout</MenuItem>
-      </Menu> */}
+  document.location.href= "/account";
+}
+
+
+render(){
+
  
   return (
   
     <div>
-      <AppBar position="static">
+      <AppBar  position="static">
   <Toolbar>
     <IconButton edge="start" onClick={this.home} className={this.state.classes.menuButton} color="inherit" aria-label="menu">
       <HomeIcon />
@@ -135,8 +113,7 @@ render(){
         open={this.state.open}
         onBlur={() => this.setState({open: false})}
       >
-        <MenuItem >Profile</MenuItem>
-        <MenuItem>My account</MenuItem>
+        <MenuItem onClick={this.goToProfile}>Profile</MenuItem>
         <MenuItem onClick={this.logout}>Logout</MenuItem>
       </Menu>
       </Button>
@@ -159,6 +136,16 @@ render(){
                     ) : (
                       <LoginPage />
                     )}
+                  </>
+                )}
+              />
+               <Route
+                exact
+                path="/account"
+                render={() => (
+                  <>
+                  {sessionStorage.getItem("token")!=="" ?<Account/> :document.location.href="/login" }
+                      
                   </>
                 )}
               />

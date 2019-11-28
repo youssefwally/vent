@@ -28,7 +28,7 @@ class LoginButton extends React.Component {
           className={classes.button}
           onClick={this.login}
           style={{
-            background: "linear-gradient(to right, #a10073, #ff0051)",
+            
             marginTop: "10px",
             borderRadius: "50px"
           }}
