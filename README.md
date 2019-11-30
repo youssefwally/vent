@@ -1,6 +1,6 @@
 # vent
 A web application 
-Dependencies:
+Dependencies:(to use write npm instal <insert Dependency>)
   +MongoDB URL, get it from the mongo web application by using the connect button
   +jsonwebtoken
   +JWT word
