@@ -1,7 +1,14 @@
 # vent
 A web application 
 Dependencies:
-  MongoDB URL, get it from the mongo web application by using the connect button
+  +MongoDB URL, get it from the mongo web application by using the connect button
+  +jsonwebtoken
+  +JWT word
+  +express
+  +mangoose
+  +cors
+  +bcryptjs
+  
 Config:
   There are 4 files:
         1) JWT file which contain the password
