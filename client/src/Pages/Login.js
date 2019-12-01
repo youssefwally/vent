@@ -7,8 +7,9 @@ import LoginButton from "../Components/Buttons/LoginButton";
 import { withStyles } from "@material-ui/core/styles";
 import SnackBar from "../Components/Snackbars/LoginSnackbar";
 import Logo from "../Images/vent.jpg";
-import {withRouter} from 'react-router-dom'
-import Account from '../Pages/Account'
+import { withRouter } from "react-router-dom";
+import Account from "../Pages/Account";
+import Link from "@material-ui/core/Link";
 
 const styles = {
   header: {
@@ -30,7 +31,6 @@ class SimpleContainer extends React.Component {
       data: {
         email: "",
         password: ""
-    
       },
       isEmptyEmail: false,
       isEmptyPass: false,
@@ -52,7 +52,9 @@ class SimpleContainer extends React.Component {
                     style={{ width: "50px", marginRight: "10px" }}
                     src={Logo}
                   />
-                  {sessionStorage.getItem("language") === 'ar'? "تسجيل دخول" : "Login"}
+                  {sessionStorage.getItem("language") === "ar"
+                    ? "تسجيل دخول"
+                    : "Login"}
                 </Typography>
                 <Username
                   isEmpty={this.state.isEmptyEmail}
@@ -63,7 +65,11 @@ class SimpleContainer extends React.Component {
                   callBack={this.handlePassword}
                 />
               </div>
-              <LoginButton callBack={this.handleLogin}/>
+              <LoginButton callBack={this.handleLogin} />
+              <div style={{"marginBottom":"50px"}}></div>
+              <Link color="secondary" href="/register">
+                Don't have an account?.. Register Now!
+              </Link>
             </Container>
           </React.Fragment>
         </div>
@@ -104,7 +110,11 @@ class SimpleContainer extends React.Component {
     });
   };
 
-  handleLogin = (e) => {
+  handleRegister=()=>{
+    document.location.href = "/register"
+  }
+
+  handleLogin = e => {
     const email = this.state.data.email;
     const password = this.state.data.password;
     if (email === "") {
@@ -134,31 +144,29 @@ class SimpleContainer extends React.Component {
     if (email !== "" && password !== "") {
       const info = this.state.data;
 
-      fetch('http://localhost:3000/api/user/login', {
-        method: 'POST',
+      fetch("http://localhost:3000/api/user/login", {
+        method: "POST",
         body: JSON.stringify(info),
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         }
-      }).then(res => {
-        res.json().then((data) => {
-
-            if (res.status !== 200) {
-                        this.catchError(res);
-                      } else {
-                        if (data.auth==true) {
-                           
-                          sessionStorage.setItem("token", data.token);
-                          sessionStorage.setItem("auth", data.auth);
-                          sessionStorage.setItem("id", data.id);
-                          sessionStorage.setItem("email",info.email);
-                          document.location.href = "/";
-                          
-                        }
-                      }
-                    })
       })
-   
+        .then(res => {
+          res.json().then(data => {
+            if (res.status !== 200) {
+              this.catchError(res);
+            } else {
+              if (data.auth == true) {
+                sessionStorage.setItem("token", data.token);
+                sessionStorage.setItem("auth", data.auth);
+                sessionStorage.setItem("id", data.id);
+                sessionStorage.setItem("email", info.email);
+                document.location.href = "/";
+              }
+            }
+          });
+        })
+
         .catch(this.catchError);
     }
   };
