@@ -57,7 +57,7 @@ const User = require("../../models/User");
       var token = jwt.sign({ id: user._id }, config.secret, {
         expiresIn: 86400 // expires in 24 hours
       });
-      res.status(200).send({ auth: true, token: token, id: user._id  });
+      res.status(200).send({ auth: true, token: token, id: user._id ,problem: user.problemType, paired: user.paired });
     });
   });
 
@@ -109,6 +109,46 @@ const User = require("../../models/User");
   
   })
   
+
+  router.get('/userProblem', async (req, res) => {
+    try {
+      var stat = 0
+      var token = req.headers['x-access-token'];
+     
+      if (!token) {
+        return res
+          .status(401)
+          .send({ auth: false, message: 'Please login first.'});
+      }
+      jwt.verify(token, config.secret, async function(err, decoded) {
+        if (err) {
+          return res
+            .status(500)
+            .send({ auth: false, message: 'Failed to authenticate token.'});
+        }
+  
+        stat=decoded.id;
+      })
+  
+      let id = stat;
+    
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).send({ error: "user does not exist" });
+      }
+      const userProblem = await user.problemType;
+  
+     
+  
+     
+      res.json({data:userProblem})
+  
+    } catch(error) {
+      console.log(error);
+    }
+  
+  })
+
 
   router.put("/changeProblem", async (req, res) => {
     try {

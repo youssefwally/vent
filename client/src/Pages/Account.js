@@ -1,55 +1,47 @@
-import React, { Component } from 'react'
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Col from 'react-bootstrap/Col'
-import avatar from '../Images/AccountIcon2.png'
-import ListGroup from 'react-bootstrap/ListGroup'
-import Fab from '@material-ui/core/Fab';
-import EditIcon from '@material-ui/icons/Edit';
-import Grid from '@material-ui/core/Grid';
+import React, { Component } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Col from "react-bootstrap/Col";
+import avatar from "../Images/AccountIcon2.png";
+import ListGroup from "react-bootstrap/ListGroup";
+import Fab from "@material-ui/core/Fab";
+import EditIcon from "@material-ui/icons/Edit";
+import Grid from "@material-ui/core/Grid";
+import Form from "react-bootstrap/Form";
+import Container from "react-bootstrap/Container";
 
 const useStyles = makeStyles(theme => ({
-    root: {
-      padding: theme.spacing(3, 2),
-    },
-  }));
-  
+  root: {
+    padding: theme.spacing(3, 2)
+  }
+}));
 
-  const useStyles2 = makeStyles(theme => ({
-    root: {
-      flexGrow: 1,
-    },
-    paper: {
-      height: 140,
-      width: 100,
-    },
-    control: {
-      padding: theme.spacing(2),
-    },
-  }));
-  
-
+const useStyles2 = makeStyles(theme => ({
+  root: {
+    flexGrow: 1
+  },
+  paper: {
+    height: 140,
+    width: 100
+  },
+  control: {
+    padding: theme.spacing(2)
+  }
+}));
 
 export default class Account extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      classes: useStyles,
+      classes2: useStyles2
+    };
+  }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-           classes : useStyles,
-           classes2:useStyles2 
-          
-          
-        };
-      
-      }
-
-
-
-    render() {
-
-
-        return (
-            <div>
+  render() {
+    return (
+      <div style={{ justifyContent: "center" }}>
+        {/* <Form>
                <Paper className={this.state.classes}>
                <Col xs={6} md={4}>
                <img
@@ -97,7 +89,111 @@ export default class Account extends Component {
 </ListGroup>
 
     </Paper>
-            </div>
-        )
-    }
+    </Form>     */}
+        <div style={{ justifyContent: "center" }}>
+          <div>
+            <Form>
+              <Form.Group>
+                <img
+                  style={{ width: "250px", marginRight: "10px" }}
+                  src={avatar}
+                />
+              </Form.Group>
+
+              <Form.Group style={{ marginTop: "30px" }}>
+                <Col sm={2}>
+                  <ListGroup.Item variant="primary">Email</ListGroup.Item>
+                  <ListGroup horizontal>
+                    <ListGroup.Item variant="light">
+                      {sessionStorage.getItem("email")}
+                    </ListGroup.Item>
+                    <Container>
+                      {" "}
+                      <Fab
+                        color="secondary"
+                        aria-label="edit"
+                        style={{ left: "70%" }}
+                      >
+                        <EditIcon />
+                      </Fab>
+                    </Container>
+                  </ListGroup>
+                </Col>
+              </Form.Group>
+            </Form>
+            <Form>
+              <Form.Group style={{ marginTop: "30px" }}>
+                <Col sm={2}>
+                  <ListGroup.Item variant="primary">Password</ListGroup.Item>
+                  <ListGroup horizontal>
+                    <ListGroup.Item variant="light">
+                      ************
+                    </ListGroup.Item>
+                    <Container style={{ marginLeft: "20%" }}>
+                      {" "}
+                      <Fab
+                        color="secondary"
+                        aria-label="edit"
+                        style={{ left: "70%" }}
+                      >
+                        <EditIcon />
+                      </Fab>
+                    </Container>
+                  </ListGroup>
+                </Col>
+              </Form.Group>
+            </Form>
+            <Form>
+              <Form.Group style={{ marginTop: "30px" }}>
+                <Col sm={2}>
+                  <ListGroup.Item variant="primary">Problem</ListGroup.Item>
+                  <ListGroup horizontal>
+                    <ListGroup.Item variant="light">
+                    {sessionStorage.getItem("problemo")}
+                    </ListGroup.Item>
+                    <Container style={{ marginLeft: "20%" }}>
+                      {" "}
+                      <Fab
+                        color="secondary"
+                        aria-label="edit"
+                        style={{ left: "70%" }}
+                      >
+                        <EditIcon />
+                      </Fab>
+                    </Container>
+                  </ListGroup>
+                </Col>
+              </Form.Group>
+            </Form>
+            <Form>
+            <Form.Group style={{ marginTop: "30px" }}>
+                <Col sm={2}>
+                  <ListGroup.Item variant="primary">Paired</ListGroup.Item>
+                  <ListGroup horizontal>
+                    <ListGroup.Item variant="light">
+                    {sessionStorage.getItem("paired")}
+                    </ListGroup.Item>
+                    <Container style={{ marginLeft: "20%" }}>
+                      {" "}
+                      <Fab
+                        color="secondary"
+                        aria-label="edit"
+                        style={{ left: "70%" }}
+                      >
+                        <EditIcon />
+                      </Fab>
+                    </Container>
+                  </ListGroup>
+                </Col>
+              </Form.Group>
+            </Form>
+
+
+
+            <br />
+          </div>
+        </div>
+      </div>
+    );
+  }
 }

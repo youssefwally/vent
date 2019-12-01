@@ -157,10 +157,18 @@ class SimpleContainer extends React.Component {
               this.catchError(res);
             } else {
               if (data.auth == true) {
+             
+              
+
                 sessionStorage.setItem("token", data.token);
                 sessionStorage.setItem("auth", data.auth);
                 sessionStorage.setItem("id", data.id);
                 sessionStorage.setItem("email", info.email);
+                sessionStorage.setItem("problemo", data.problem);
+                sessionStorage.setItem("paired", data.paired);
+                
+              
+                
                 document.location.href = "/";
               }
             }
