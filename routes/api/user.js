@@ -174,8 +174,8 @@ const User = require("../../models/User");
         return res.status(404).send({ error: "user does not exist" });
       }
       var query = { _id: id};
-        await User.findOneAndUpdate(query, { problemType: problemType });
-        res.json({ msg: "Problem Changed Successfully" });
+        const theProb=await User.findOneAndUpdate(query, { problemType: problemType });
+        res.json({ msg: "Problem Changed Successfully", problem:theProb.problemType });
       
     } catch (error) {
       console.log(error);
@@ -201,20 +201,20 @@ const User = require("../../models/User");
         stat = decoded.id;
       });
       let id = stat;
-      var sysPaired = '0';
+      var sysPaired = 'no';
     if(req.body.paired==='yes'){
-        sysPaired = '1';
+        sysPaired = 'yes';
     }
     if(req.body.paired==='Yes'){
-        sysPaired = '1';
+        sysPaired = 'yes';
     }
     const user = await User.findById(id);
       if (!user) {
         return res.status(404).send({ error: "user does not exist" });
       }
       var query = { _id: id};
-        await User.findOneAndUpdate(query, { paired: sysPaired });
-        res.json({ msg: "Availability Changed Successfully" });
+    const yalla=    await User.findOneAndUpdate(query, { paired: sysPaired });
+        res.json({ msg: "Availability Changed Successfully",paired:sysPaired });
       
     } catch (error) {
       console.log(error);
@@ -278,7 +278,7 @@ const User = require("../../models/User");
         return res.status(404).send({ error: "user does not exist" });
       }
       var query = { _id: id};
-        await User.findOneAndUpdate(query, { password: password });
+       const hey= await User.findOneAndUpdate(query, { password: password });
         res.json({ msg: "Password Changed Successfully" });
       
     } catch (error) {
@@ -310,8 +310,8 @@ const User = require("../../models/User");
         return res.status(404).send({ error: "user does not exist" });
       }
       var query = { _id: id};
-        await User.findOneAndUpdate(query, { email: email });
-        res.json({ msg: "Email Changed Successfully" });
+   const hey=  await User.findOneAndUpdate(query, { email: email });
+        res.json({ msg: "Email Changed Successfully", email:email });
       
     } catch (error) {
       console.log(error);
