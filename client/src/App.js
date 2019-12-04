@@ -14,6 +14,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Account from "./Pages/Account";
 import Register from "./Pages/RegisterPageContainer";
+import Container from "react-bootstrap/Container"
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
@@ -90,18 +91,23 @@ export class App extends React.Component {
                 Login
               </Button>
             ) : (
-              <Button color="inherit" style={{ "margin-left": "90%" }}>
+              // <Button color="inherit" >
+              <>
                 <IconButton
                   aria-label="account of current user"
                   aria-controls="menu-appbar"
                   aria-haspopup="true"
                   onClick={this.handleMenu}
                   color="inherit"
+                  style={{ "margin-left": "90%" }}
                 >
                   <AccountCircle />
                 </IconButton>
+               
                 <Menu
                   id="menu-appbar"
+                  anchorEl={{ vertical: "top",
+                  horizontal: "right"}}
                   anchorOrigin={{
                     vertical: "top",
                     horizontal: "right"
@@ -113,11 +119,14 @@ export class App extends React.Component {
                   }}
                   open={this.state.open}
                   onBlur={() => this.setState({ open: false })}
-                >
+                > 
                   <MenuItem onClick={this.goToProfile}>Profile</MenuItem>
                   <MenuItem onClick={this.logout}>Logout</MenuItem>
+                 
                 </Menu>
-              </Button>
+              </>  
+              // </Button>
+              
             )}
           </Toolbar>
         </AppBar>

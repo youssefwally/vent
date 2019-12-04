@@ -40,48 +40,40 @@ export default class Account extends Component {
     this.state = {
       classes: useStyles,
       classes2: useStyles2,
-      problemBox:"",
+      problemBox: "",
       newEmail: "",
       emailTextbox: "",
       passwordTextbox: "",
-      newPassword:"",
-      problems:[],
-      selectedProblem:"",
-      listItems:"",
+      newPassword: "",
+      problems: [],
+      selectedProblem: "",
+      listItems: "",
+      selectedProblem: "",
       token: sessionStorage.getItem("token")
     };
   }
 
-
-  componentDidMount () {
+  componentDidMount() {
     {
-      fetch('http://localhost:3000/api/problem/vProblem', {
-        method: 'GET',
+      fetch("http://localhost:3000/api/problem/vProblem", {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         }
       })
-
         .then(res => res.json())
         .then(json => {
-          
-            
-          
-            this.setState({ 
-              problems: json.data
-            })
-          
-        })
+          this.setState({
+            problems: json.data
+          });
+        });
     }
-    
   }
 
-
   registerEmail = () => {
-    
     fetch("http://localhost:3000/api/user/changeEmail", {
-      method: 'PUT',
-      body: JSON.stringify({email:this.state.newEmail}),
+      method: "PUT",
+      body: JSON.stringify({ email: this.state.newEmail }),
       headers: new Headers({
         "Content-Type": "application/json",
         "x-access-token": this.state.token
@@ -94,7 +86,7 @@ export default class Account extends Component {
           } else {
             sessionStorage.setItem("email", data.email);
 
-           window.location.reload();
+            window.location.reload();
           }
         });
       })
@@ -102,12 +94,10 @@ export default class Account extends Component {
       .catch(this.catchError);
   };
 
-
   registerPassword = () => {
-    
     fetch("http://localhost:3000/api/user/changePassword", {
-      method: 'PUT',
-      body: JSON.stringify({password:this.state.newPassword}),
+      method: "PUT",
+      body: JSON.stringify({ password: this.state.newPassword }),
       headers: new Headers({
         "Content-Type": "application/json",
         "x-access-token": this.state.token
@@ -120,7 +110,7 @@ export default class Account extends Component {
           } else {
             sessionStorage.setItem("password", data.password);
 
-           window.location.reload();
+            window.location.reload();
           }
         });
       })
@@ -128,15 +118,10 @@ export default class Account extends Component {
       .catch(this.catchError);
   };
 
+  handleTheProblem = () => {
+    //this.setState({problemBox:x})
+  };
 
-  handleTheProblem=()=>{
-
-
-  
-
-  //this.setState({problemBox:x})
-}
-  
   handleEmail = () => {
     const x = (
       <InputGroup className="mb-3">
@@ -159,7 +144,7 @@ export default class Account extends Component {
     this.setState({ emailTextbox: x });
   };
   handlePassword = () => {
-    const x= (
+    const x = (
       <InputGroup className="mb-3">
         <InputGroup.Prepend>
           <Button variant="success" onClick={this.registerPassword}>
@@ -180,7 +165,6 @@ export default class Account extends Component {
     this.setState({ passwordTextbox: x });
   };
 
-
   removeItem = () => {
     this.setState({ emailTextbox: "" });
   };
@@ -191,17 +175,17 @@ export default class Account extends Component {
   handleChange = input => e => {
     this.setState({ [input]: e.target.value });
   };
-  handlePair=()=>{
-    var paired=sessionStorage.getItem("paired")
+  handlePair = () => {
+    var paired = sessionStorage.getItem("paired");
 
-    if(paired==="yes"){
-      paired="No";
-    }else{
-      paired="yes";
+    if (paired === "yes") {
+      paired = "No";
+    } else {
+      paired = "yes";
     }
     fetch("http://localhost:3000/api/user/changePair", {
-      method: 'PUT',
-      body: JSON.stringify({paired:paired}),
+      method: "PUT",
+      body: JSON.stringify({ paired: paired }),
       headers: new Headers({
         "Content-Type": "application/json",
         "x-access-token": this.state.token
@@ -214,26 +198,51 @@ export default class Account extends Component {
           } else {
             sessionStorage.setItem("paired", data.paired);
 
-           window.location.reload();
+            window.location.reload();
           }
         });
       })
 
       .catch(this.catchError);
-
-  }
+  };
 
   render() {
-    console.log(this.state.newEmail);
-   
-    // this.setState(this.state.problems.map((item, i) => (
-    //   <div>
-    // <Dropdown.Item onClick={()=>{this.setState({selectedProblem:item.problemType})}}>{item.problemType}</Dropdown.Item>
-    
-    //   </div>
-  
-    //       ))
-    // )
+    const listItems = this.state.problems.map((item, i) => (
+      <div>
+        <Dropdown.Item
+          onClick={() => {
+            this.setState({ selectedProblem: item.problemType });
+
+            fetch("http://localhost:3000/api/user/changeProblem", {
+              method: "PUT",
+              body: JSON.stringify({ problemType: item.problemType }),
+              headers: new Headers({
+                "Content-Type": "application/json",
+                "x-access-token": this.state.token
+              })
+            })
+              .then(res => {
+                res.json().then(data => {
+                  if (res.status !== 200) {
+                    this.catchError(res);
+                  } else {
+                    sessionStorage.setItem("problemo", data.problem);
+
+                    window.location.reload();
+                  }
+                });
+              })
+
+              .catch(this.catchError);
+
+            //window.location.reload();
+          }}
+        >
+          {item.problemType}
+        </Dropdown.Item>
+      </div>
+    ));
+
     return (
       <div style={{ justifyContent: "center" }}>
         <div style={{ justifyContent: "center" }}>
@@ -308,14 +317,18 @@ export default class Account extends Component {
                     </ListGroup.Item>
                     <Container style={{ marginLeft: "20%" }}>
                       {" "}
-                      <Fab
-                        color="secondary"
-                        aria-label="edit"
-                        style={{ left: "70%" }}
-                        onClick={this.handleTheProblem}
+                      <Form.Group
+                        controlId="englishDesc"
+                        style={{ marginTop: "30px" }}
                       >
-                        <EditIcon />
-                      </Fab>
+                        <DropdownButton
+                          id="dropdown-basic-button"
+                          title="Problem Type"
+                          variant="secondary"
+                        >
+                          {listItems}
+                        </DropdownButton>
+                      </Form.Group>
                     </Container>
                   </ListGroup>
                 </Col>

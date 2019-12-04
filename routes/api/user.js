@@ -175,7 +175,7 @@ const User = require("../../models/User");
       }
       var query = { _id: id};
         const theProb=await User.findOneAndUpdate(query, { problemType: problemType });
-        res.json({ msg: "Problem Changed Successfully", problem:theProb.problemType });
+        res.json({ msg: "Problem Changed Successfully", problem:problemType });
       
     } catch (error) {
       console.log(error);
