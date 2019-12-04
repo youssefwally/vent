@@ -15,7 +15,7 @@ import Menu from "@material-ui/core/Menu";
 import Account from "./Pages/Account";
 import Register from "./Pages/RegisterPageContainer";
 
-import Homepage from "./Pages/HomePage"
+import Homepage from "./Pages/HomePage2"
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
