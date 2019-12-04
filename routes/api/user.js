@@ -96,7 +96,7 @@ const User = require("../../models/User");
       var query = { 
         _id: {$ne: id},
         problemType: userProblem,
-        paired: "0"
+        paired: "No"
       }
   
       const common = await User.find(query);

@@ -14,7 +14,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Account from "./Pages/Account";
 import Register from "./Pages/RegisterPageContainer";
-import Container from "react-bootstrap/Container"
+
+import Homepage from "./Pages/HomePage"
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
@@ -172,6 +173,14 @@ export class App extends React.Component {
                 </>
               )}
             />
+  <Route
+              exact
+              path="/"
+              render={() => (
+               <Homepage/>
+              )}
+            />
+
           </React.Fragment>
         </Router>
       </div>
