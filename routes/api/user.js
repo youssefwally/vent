@@ -230,12 +230,14 @@ const User = require("../../models/User");
       });
       let id = stat;
       const password = req.body.password;
+      const salt = bcrypt.genSaltSync(10)
+      const hashedPassword = bcrypt.hashSync(password, salt)
       const user = await User.findById(id);
       if (!user) {
         return res.status(404).send({ error: "user does not exist" });
       }
       var query = { _id: id};
-       const hey= await User.findOneAndUpdate(query, { password: password });
+       const hey= await User.findOneAndUpdate(query, { password: hashedPassword });
         res.json({ msg: "Password Changed Successfully" });
       
     } catch (error) {
