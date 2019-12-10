@@ -2,12 +2,57 @@
 const express = require('express')
 const router = express.Router()
 const Problem = require('../../models/Problem')
-
+var jwt = require("jsonwebtoken");
+var config = require("../../config/jwt");
+const User = require("../../models/User");
 router.get("/vProblem", async (req, res) => {
     const problems = await Problem.find();
     const view = problems;
     res.json({ data: view });
   });
+
+  router.get('/sProblemView', async (req, res) => {
+    try {
+      var stat = 0
+      var token = req.headers['x-access-token'];
+     
+      if (!token) {
+        return res
+          .status(401)
+          .send({ auth: false, message: 'Please login first.'});
+      }
+      jwt.verify(token, config.secret, async function(err, decoded) {
+        if (err) {
+          return res
+            .status(500)
+            .send({ auth: false, message: 'Failed to authenticate token.'});
+        }
+  
+        stat=decoded.id;
+      })
+  
+      let id = stat;
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).send({ error: "user does not exist" });
+      }
+      const userProblem = await user.problemType;
+      var query = { 
+        _id: {$ne: id},
+        problemType: userProblem,
+        paired: "No"
+      }
+  
+      const common = await User.find(query);
+      const view = common;
+      res.json({data:view});
+  
+    } catch(error) {
+      console.log(error);
+    }
+  
+  })
+  
 
 
   router.post('/aProblem', async (req, res) => {

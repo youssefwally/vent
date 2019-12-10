@@ -15,7 +15,7 @@ import Menu from "@material-ui/core/Menu";
 import Account from "./Pages/Account";
 import Register from "./Pages/RegisterPageContainer";
 
-import Homepage from "./Pages/HomePage2"
+import Homepage from "./Pages/HomePage2";
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
@@ -104,11 +104,10 @@ export class App extends React.Component {
                 >
                   <AccountCircle />
                 </IconButton>
-               
+
                 <Menu
                   id="menu-appbar"
-                  anchorEl={{ vertical: "top",
-                  horizontal: "right"}}
+                  anchorEl={{ vertical: "top", horizontal: "right" }}
                   anchorOrigin={{
                     vertical: "top",
                     horizontal: "right"
@@ -120,14 +119,12 @@ export class App extends React.Component {
                   }}
                   open={this.state.open}
                   onBlur={() => this.setState({ open: false })}
-                > 
+                >
                   <MenuItem onClick={this.goToProfile}>Profile</MenuItem>
                   <MenuItem onClick={this.logout}>Logout</MenuItem>
-                 
                 </Menu>
-              </>  
+              </>
               // </Button>
-              
             )}
           </Toolbar>
         </AppBar>
@@ -173,14 +170,7 @@ export class App extends React.Component {
                 </>
               )}
             />
-  <Route
-              exact
-              path="/"
-              render={() => (
-               <Homepage/>
-              )}
-            />
-
+            <Route exact path="/" render={() => <Homepage />} />
           </React.Fragment>
         </Router>
       </div>
